@@ -1,0 +1,42 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="http://cdn.pydata.org/bokeh/release/bokeh-0.12.15.min.css" type="text/css" />
+    <link rel="stylesheet" href="/static/css/style.css" type='text/css'/>
+    <script type="text/javascript" src="/static/js/bokeh-0.12.15.min.js"></script>
+    <script type="text/javascript" src="/static/js/bokeh-widgets-0.12.15.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <div class='title'>
+      {{state_abbr}}
+    </div>
+
+    <div class='state_select'>
+      <div>
+        <label for='state_chooser'>Pick a state</label>
+        <select onChange="changeState()" id='state_chooser' name='state_chooser'>
+          {% for state in state_list %}
+          <option value={{state}}
+          {% if state|string() == state_abbr|string() %} selected {% endif %}>
+            {{state}}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <div class='map_div'>
+      {{div | safe}}
+    </div>
+
+  </body>
+  {{javascript | safe}}
+
+  <script>
+    function changeState() {
+      const state_chosen = $('#state_chooser').val();
+      const new_url = 'http://127.0.0.1:5000/' + state_chosen
+      window.location.href = new_url;
+    }
+  </script>
+</html>
