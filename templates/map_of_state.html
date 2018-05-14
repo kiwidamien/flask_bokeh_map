@@ -23,6 +23,14 @@
           {% endfor %}
         </select>
       </div>
+      <div>
+        <label for='dataset_chooser'>Pick a dataset</label>
+        <select onChange="changeDataset()" id='dataset_chooser' name='dataset_chooser'>
+          <option value='none'>Choose a dataset</option>
+          <option value='MEDHHINC_2016'>Median income</option>
+          <option value='PCTPOVALL_2016'>Percent poor</option>
+        </select>
+      </div>
     </div>
 
     <div class='map_div'>
@@ -35,8 +43,18 @@
   <script>
     function changeState() {
       const state_chosen = $('#state_chooser').val();
-      const new_url = 'http://127.0.0.1:5000/' + state_chosen
+      const dataset = $('#dataset_chooser').val();
+      const new_url = 'http://127.0.0.1:5000/' + state_chosen + '/' + dataset
       window.location.href = new_url;
+    }
+
+    function changeDataset() {
+      const dataset = $('#dataset_chooser').val();
+      if (dataset === 'none') {
+        return;
+      }
+      // if we selected a non-none dataset, use changeState to update page
+      changeState();
     }
   </script>
 </html>

@@ -38,18 +38,24 @@ def get_map_div(state_name, field_to_plot='MEDHHINC_2016', add_tiles=False):
         state=list(df_filtered.state),
         median_income=df_filtered.MEDHHINC_2016,
         percent_poor=df_filtered.PCTPOVALL_2016,
-        color_county=[colors[min(int(data/15000), len(colors) - 1)] for data in df_filtered[field_to_plot]]
+        income_color_county=[colors[min(int(data/15000.0), len(colors) - 1)] for data in df_filtered.MEDHHINC_2016],
+        percent_poor_color_county=[colors[min(int(percent/5.0), len(colors)-1)] for percent in df_filtered.PCTPOVALL_2016]
     ))
 
     TOOLS="pan,wheel_zoom,box_zoom,reset,hover,save"
 
     title = '{}: map of {}'.format(state_name, field_to_plot)
 
+    if field_to_plot == 'MEDHHINC_2016':
+        name_of_color_field = 'income_color_county'
+    else:
+        name_of_color_field = 'percent_poor_color_county'
+
     f = figure(title=title, tools=TOOLS,
                plot_width=450, plot_height=350,
                background_fill_color='#C1DEE2')
 
-    f.patches(xs='x', ys='y', fill_color='color_county',
+    f.patches(xs='x', ys='y', fill_color=name_of_color_field,
               line_color='white', line_width=0.5, line_alpha=0.7,
               fill_alpha=0.7, source=source)
 
@@ -57,7 +63,7 @@ def get_map_div(state_name, field_to_plot='MEDHHINC_2016', add_tiles=False):
         f.add_tile(STAMEN_TERRAIN_RETINA)
 
     add_hover_tool(f)
-
+    print(df_filtered.PCTPOVALL_2016)
     javascript, div = components(f)
 
     return (javascript, div)
